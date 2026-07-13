@@ -837,16 +837,16 @@
     <div class="memory-grid">
 
       <div class="memory-card reveal">
-        <img src="foto1.jpeg" alt="">
+        <img src="images/foto1.jpeg" alt="">
       </div>
       <div class="memory-card reveal">
-        <img src="foto2.jpeg" alt="">
+        <img src="images/foto2.jpeg" alt="">
       </div>
       <div class="memory-card reveal">
-        <img src="foto3.jpeg" alt="">
+        <img src="images/foto3.jpeg" alt="">
       </div>
       <div class="memory-card reveal">
-        <img src="foto4.jpeg" alt="">
+        <img src="images/foto4.jpeg" alt="">
       </div>
     </div>
 
@@ -882,7 +882,7 @@
 
       <button class="gift-frame" id="giftBtn" aria-label="Klik untuk membuka kado">
         <span class="ring"></span>
-        <img src="kado.gif" alt="Kado ulang tahun">
+        <img src="images/kado.gif" alt="Kado ulang tahun">
       </button>
 
       <div class="caption">Sentuh untuk membuka</div>
@@ -1139,8 +1139,8 @@
 
     giftBtn.addEventListener('click', () => {
       const link = document.createElement('a');
-      link.href = 'kynd.pdf';
-      link.download = 'kynd.pdf';
+      link.href = 'file/kynd.pdf';
+      link.download = 'file/kynd.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1161,7 +1161,7 @@
 
       try {
 
-        const response = await fetch("wishes.json");
+        const response = await fetch("file/wishes.json");
         const wishes = await response.json();
 
         const container = document.getElementById("floatingWishes");
