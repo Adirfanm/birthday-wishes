@@ -232,9 +232,6 @@
     #wishes {
       position: relative;
       overflow: hidden;
-      /* background:
-        radial-gradient(ellipse at 50% 100%, rgba(255, 143, 184, 0.28), transparent 55%),
-        var(--bg); */
     }
 
     #wishes h2 {
@@ -280,14 +277,6 @@
       flex-shrink: 0;
     }
 
-    .floating-wishes {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      z-index: 1;
-      pointer-events: none;
-    }
-
     .wish-main {
       position: relative;
       z-index: 5;
@@ -300,80 +289,113 @@
       box-shadow: 0 25px 60px rgba(0, 0, 0, .08);
     }
 
-    .wish-bubble {
-      position: absolute;
-      max-width: 230px;
-      padding: 16px 18px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, .18);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, .28);
-      color: var(--text);
-      opacity: .45;
-      animation: floatWish linear infinite;
-      filter: blur(.25px);
+    /* ===== Section 3B : Ucapan dari Orang Terdekat (infinite scroll) ===== */
+    #friend-wishes {
+      background: var(--bg-soft);
     }
 
-    .wish-message {
-      line-height: 1.5;
-      font-size: .85rem;
-      font-weight: 600;
-    }
-
-    .wish-name {
-      margin-top: .7rem;
-      text-align: right;
+    #friend-wishes h2 {
+      font-size: 2.2rem;
       color: var(--pink-deep);
-      font-size: .75rem;
+      margin-bottom: .7rem;
       font-weight: 700;
     }
 
-    @keyframes floatWish {
-      0% {
-        transform:
-          translateY(120vh) translateX(0px) rotate(-4deg);
-        opacity: 0;
+    #friend-wishes .subtitle {
+      color: var(--text-soft);
+      max-width: 460px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    /* Viewport: jendela tetap dengan fade di atas/bawah, isinya di-mask
+       supaya kotak-kotak yang scroll terlihat muncul & menghilang halus. */
+    .wishes-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 620px;
+      height: min(66vh, 600px);
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+
+    /* Track berisi 2 salinan list (untuk loop mulus) dan diberi padding
+       kiri-kanan supaya kotak yang menempel ke tepi tidak mepet banget. */
+    .wishes-track {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+      padding: 0 1.8rem;
+      animation-name: scrollWishesTrack;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    .wishes-viewport:hover .wishes-track {
+      animation-play-state: paused;
+    }
+
+    /* Kotak tumpul: lebar menyesuaikan konten (fit-content), dibatasi
+       max-width, dan menempel ke kiri atau kanan container secara acak. */
+    .wish-note {
+      width: fit-content;
+      max-width: 76%;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 1rem 1.35rem;
+      text-align: left;
+      box-shadow: 0 16px 38px -20px rgba(255, 61, 129, 0.4);
+    }
+
+    .wish-note.is-left {
+      align-self: flex-start;
+      border-bottom-left-radius: 6px;
+    }
+
+    .wish-note.is-right {
+      align-self: flex-end;
+      border-bottom-right-radius: 6px;
+    }
+
+    .wish-note .wish-text {
+      font-size: .92rem;
+      line-height: 1.6;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .wish-note .wish-from {
+      margin-top: .6rem;
+      font-family: 'Baloo 2', sans-serif;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--pink-deep);
+      text-align: right;
+    }
+
+    /* Track = 2x tinggi list asli, jadi -50% = tepat 1 putaran, mulus tanpa jeda */
+    @keyframes scrollWishesTrack {
+      from {
+        transform: translateY(0);
       }
 
-      10% {
-        opacity: .45;
-      }
-
-      90% {
-        opacity: .45;
-      }
-
-      100% {
-        transform:
-          translateY(-140vh) translateX(40px) rotate(4deg);
-        opacity: 0;
+      to {
+        transform: translateY(-50%);
       }
     }
 
     @media (max-width: 768px) {
-      #wishes {
-        min-height: 130vh;
+      .wishes-viewport {
+        max-width: 100%;
+        height: min(70vh, 520px);
       }
 
-      .wish-main {
-        margin-bottom: 45vh;
-      }
-
-      .floating-wishes {
-        overflow: visible;
-      }
-
-      .wish-bubble {
-        max-width: 150px;
-        padding: 12px 14px;
-      }
-
-      .wish-message {
-        font-size: .75rem;
-      }
-
-      .wish-name {
-        font-size: .65rem;
+      .wish-note {
+        max-width: 85%;
+        padding: .85rem 1.1rem;
       }
     }
 
@@ -734,6 +756,10 @@
         animation: none !important;
         transition: none !important;
       }
+
+      .wishes-track {
+        transform: none !important;
+      }
     }
 
     @media (max-width:480px) {
@@ -791,8 +817,6 @@
   <!-- ================= SECTION 3 : WISHES & DOA ================= -->
   <section id="wishes">
 
-    <div id="floatingWishes" class="floating-wishes"></div>
-
     <div class="wish-main reveal">
 
       <h2>Birthday Wishes &amp; Doa</h2>
@@ -815,6 +839,15 @@
 
     </div>
 
+  </section>
+
+  <!-- ================= SECTION 3B : UCAPAN DARI ORANG TERDEKAT (infinite scroll) ================= -->
+  <section id="friend-wishes">
+    <h2 class="reveal">Selain aku, banyak juga yang sayang sama kamu!</h2>
+    <p class="subtitle reveal">Doa dan ucapan yang dititipkan untuk kamu, mengalir tiada henti 🤍</p>
+    <div class="wishes-viewport reveal">
+      <div class="wishes-track" id="wishesTrack"></div>
+    </div>
   </section>
 
   <!-- ================= SECTION 4 : OUR MEMORIES ================= -->
@@ -1155,92 +1188,45 @@
       setTimeout(() => { giftBtn.style.transform = ''; }, 180);
     });
 
-    /* ===== Floating Wishes ===== */
-
-    async function loadFloatingWishes() {
-
+    /* ===== Ucapan dari Orang Terdekat: infinite vertical scroll ===== */
+    async function loadFriendWishes() {
       try {
-
         const response = await fetch("file/wishes.json");
         const wishes = await response.json();
 
-        const container = document.getElementById("floatingWishes");
+        if (!Array.isArray(wishes) || wishes.length === 0) return;
 
-        let index = 0;
+        const track = document.getElementById("wishesTrack");
 
-        function createBubble(wish) {
+        // Posisi kiri/kanan diacak sekali per wish, dipakai sama di kedua
+        // salinan list supaya loop tetap konsisten secara visual.
+        const sides = wishes.map(() => (Math.random() < 0.5 ? "is-left" : "is-right"));
 
-          const bubble = document.createElement("div");
-          bubble.className = "wish-bubble";
-
-          const scale = 0.75 + Math.random() * 0.6;
-
-          bubble.innerHTML = `
-                <div class="wish-message">
-                    ${wish.message}
-                </div>
-
-                <div class="wish-name">
-                    — ${wish.name}
-                </div>
-            `;
-
-          const isMobile = window.innerWidth <= 768;
-
-          let leftStart, leftRange;
-          let rightStart, rightRange;
-
-          if (isMobile) {
-            leftStart = 3;
-            leftRange = 10;
-
-            rightStart = 43;
-            rightRange = 10;
-
-          } else {
-            leftStart = 0;
-            leftRange = 18;
-
-            rightStart = 50;
-            rightRange = 18;
-          }
-
-          const isLeft = Math.random() < 0.5;
-
-          if (isLeft) {
-            bubble.style.left = (leftStart + Math.random() * leftRange) + "%";
-          } else {
-            bubble.style.left = (rightStart + Math.random() * rightRange) + "%";
-          }
-
-          bubble.style.bottom = "-250px";
-          bubble.style.transform = `scale(${scale})`;
-          bubble.style.opacity = 0.25 + (scale * 0.35);
-          bubble.style.animationDuration =
-            (35 + Math.random() * 15) + "s";
-          container.appendChild(bubble);
-          bubble.addEventListener("animationend", () => {
-            bubble.remove();
-          });
+        function renderSet() {
+          return wishes.map((wish, i) => `
+            <div class="wish-note ${sides[i]}">
+              <p class="wish-text">${wish.message}</p>
+              <p class="wish-from">— ${wish.name}</p>
+            </div>
+          `).join("");
         }
 
-        function startSpawner() {
-          createBubble(wishes[index]);
-          index = (index + 1) % wishes.length;
-          const next = 5000 + Math.random() * 1000;
-          setTimeout(startSpawner, next);
-        }
+        // List digandakan (2x) supaya animasi translateY(-50%) looping mulus
+        // tanpa jeda, apa pun jumlah datanya.
+        track.innerHTML = renderSet() + renderSet();
 
-        // Jalankan pertama kali
-        startSpawner();
-
-
+        // Durasi scroll menyesuaikan jumlah wishes yang diambil dari JSON —
+        // makin banyak ucapan, makin lama satu putaran penuh.
+        const SECONDS_PER_WISH = 4.5;
+        const MIN_DURATION = 14;
+        const duration = Math.max(wishes.length * SECONDS_PER_WISH, MIN_DURATION);
+        track.style.animationDuration = duration + "s";
       } catch (err) {
         console.error(err);
       }
     }
 
-    loadFloatingWishes();
+    loadFriendWishes();
 
   </script>
 
